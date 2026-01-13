@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Muerte del Arte Suave</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Oswald:wght@500;600;700&family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --bg-light: #2a2a2a;
+            --text: #d0d0d0;
+            --text-muted: #888;
+            --white: #ffffff;
+            --red: #e63946;
+            --gold: #d4af37;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 18px;
+            line-height: 1.7;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .hero-content { max-width: 800px; }
+        .hero-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+        }
+        .hero h1 span { color: var(--red); }
+        .intro-section { padding-top: 3rem; padding-bottom: 2rem; }
+        .intro-section p { font-size: 1.1rem; line-height: 1.8; }
+        .intro-section strong { color: var(--white); font-style: italic; }
+        .hero-intro {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 580px;
+            margin: 0 auto 2rem;
+        }
+        .hero-image {
+            max-width: 600px;
+            width: 90%;
+            height: auto;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+        .hero-meta { font-size: 13px; color: var(--text-muted); }
+
+        .scrolly-container { position: relative; }
+        .scrolly-graphic {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg);
+            z-index: 1;
+        }
+        .scrolly-graphic img {
+            max-width: 90%;
+            max-height: 85vh;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            position: absolute;
+        }
+        .scrolly-graphic img.active { opacity: 1; }
+        .scrolly-steps {
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+            background: transparent;
+        }
+        .scrolly-step {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .scrolly-step:first-child { margin-top: -100vh; }
+        .scrolly-spacer { height: 60vh; pointer-events: none; }
+        
+        .scrolly-card {
+            background: rgba(255, 255, 255, 0.97);
+            color: #1a1a1a;
+            max-width: 680px;
+            padding: 2rem 2.5rem;
+            border: 3px solid #1a1a1a;
+            pointer-events: auto;
+            font-family: 'Source Serif Pro', Georgia, serif;
+        }
+        .scrolly-card h2 {
+            font-family: 'Source Serif Pro', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+            text-transform: none;
+            text-align: left;
+        }
+        .scrolly-card p {
+            margin-bottom: 0.75rem;
+            color: #333;
+            font-size: 1.05rem;
+            line-height: 1.65;
+        }
+        .scrolly-card p:last-child { margin-bottom: 0; }
+        .scrolly-card strong { color: #1a1a1a; font-weight: 700; }
+        .scrolly-card .era-label {
+            display: block;
+            font-family: 'Source Serif Pro', Georgia, serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+        .scrolly-card.dark-card {
+            background: rgba(30, 30, 30, 0.97);
+            color: var(--text);
+            border: 3px solid #444;
+        }
+        .scrolly-card.dark-card h2 { color: var(--white); }
+        .scrolly-card.dark-card p { color: var(--text); }
+        .scrolly-card.dark-card strong { color: var(--white); font-weight: 700; }
+        .scrolly-card.dark-card .era-label { color: var(--text); }
+        
+        .explore-cta {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--bg-light);
+        }
+        .explore-cta p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .explore-cta .arrow {
+            font-size: 2rem;
+            color: var(--gold);
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        .content { max-width: 680px; margin: 0 auto; padding: 0 2rem; }
+        .section { padding: 5rem 0; }
+        p { margin-bottom: 1.25rem; }
+        .lead { font-size: 1.3rem; color: var(--white); line-height: 1.6; }
+        strong { color: var(--white); font-weight: 600; }
+        .highlight { color: var(--red); font-weight: 600; }
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 1.25rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .separator { width: 50px; height: 2px; background: var(--gold); margin: 4rem auto; }
+        
+        .compare {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 2rem 0;
+        }
+        .compare-item { padding: 1.5rem; background: var(--bg-light); border-radius: 4px; }
+        .compare-item.era-1 { border-left: 3px solid var(--text-muted); }
+        .compare-item.era-2 { border-left: 3px solid var(--red); }
+        .compare-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .compare-value {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+        .compare-desc { font-size: 13px; color: var(--text-muted); margin-top: 0.25rem; }
+
+        .viz { background: var(--bg-light); margin: 3rem 0; padding: 2rem; border-radius: 4px; }
+        .viz-full {
+            margin: 3rem 0;
+            padding: 2rem;
+            border-radius: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @media (min-width: 900px) { .viz-full { padding: 2rem 4rem; } }
+        .viz-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .viz-embed {
+            background: var(--bg);
+            min-height: 450px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-size: 14px;
+        }
+        .viz-embed .flourish-embed { width: 100% !important; }
+
+        .cards-section { padding: 4rem 2rem; background: var(--bg-light); }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        .card { aspect-ratio: 2.5/3.5; cursor: pointer; position: relative; }
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card:hover .card-inner { transform: rotateY(180deg); }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .card-front {
+            background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 2px solid #333;
+        }
+        .card-back {
+            background: #fff;
+            transform: rotateY(180deg);
+            border: 2px solid #ddd;
+            justify-content: flex-start;
+            padding-top: 1.5rem;
+        }
+        .card-name {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1rem;
+            color: #fff;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        .card-number {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-top: 0.5rem;
+        }
+        .card-img { width: 80%; max-height: 50%; object-fit: contain; margin-bottom: 0.75rem; }
+        .card-desc {
+            font-size: 11px;
+            color: #333;
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 0.5rem;
+        }
+        .card.negra .card-number { color: #fff; }
+        .card.negra .card-front { border-color: #444; }
+        .card.marron .card-number { color: #8B4513; }
+        .card.marron .card-front { border-color: #8B4513; }
+        .card.morada .card-number { color: #800080; }
+        .card.morada .card-front { border-color: #800080; }
+        .card.azul .card-number { color: #0066cc; }
+        .card.azul .card-front { border-color: #0066cc; }
+        .card.blanca .card-number { color: #ccc; }
+        .card.blanca .card-front { border-color: #666; }
+        .cards-hint { color: var(--text-muted); font-size: 13px; margin-top: 2rem; }
+
+        footer { background: #1a1a1a; padding: 4rem 2rem; }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        .footer-col h4 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+        .footer-col p { font-size: 14px; line-height: 1.8; color: var(--text-muted); }
+        .footer-col a { color: var(--text-muted); text-decoration: none; }
+        .footer-col a:hover { color: var(--gold); }
+        .credits-section {
+            background: var(--bg-light);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+            border-top: 2px solid var(--gold);
+        }
+        .credits-content { max-width: 800px; margin: 0 auto; }
+        .credits-content h2 { text-align: left; }
+
+        @media (max-width: 600px) {
+            .scrolly-card { max-width: 90%; padding: 1.5rem; }
+            .compare { grid-template-columns: 1fr; }
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <img src="img/hero_rnc.png" alt="RNC - Pues a mí me parece que sí" class="hero-image">
+            <h1><span>¿Estrangular ya no funciona?</span></h1>
+            <p class="hero-intro">Cómo el progreso técnico está acabando con las sumisiones en UFC.</p>
+            <p class="hero-meta">by Kevin Muñoz Borondo · Visualización de datos UOC 2026</p>
+        </div>
+    </section>
+    <section class="content">
+        <div class="section intro-section">
+            <p>En el ajedrez de élite, el 70% de las partidas terminan en tablas. En el baloncesto actual, solo escuchamos quejas de la dominancia de los triples. En la UFC, las sumisiones se extinguen y el Jiu Jitsu Brasileño ha pasado de sello de identidad a cada vez destacar menos. El patrón parece claro: cuando sube el nivel técnico, el espectáculo se reduce.</p>
+            <p>Pero, ¿qué es el Jiu Jitsu Brasileño? El Jiu Jitsu Brasileño es un deporte de contacto sin golpeo que utiliza distintas técnicas para dominar y lograr someter al rival. El MMA es uno de los deportes de moda, siendo la UFC su máximo estandarte, sin embargo, este ahora es muy distinto respecto de cómo se concibió.</p>
+            <p>¿Ha dejado el arte suave de funcionar o funciona tan bien que todos ahora son expertos?</p>
+        </div>
+    </section>
+    <div class="scrolly-container">
+        <div class="scrolly-graphic">
+            <img src="img/grafico_era_clasica.png" alt="Era Clásica 1993-2008" id="img-era1">
+            <img src="img/grafico_completo.png" alt="Completo 1993-2024" id="img-era2">
+        </div>
+        <div class="scrolly-steps">
+            <div class="scrolly-step" data-step="0">
+                <div class="scrolly-card">
+                    <div class="era-label">12 de noviembre, 1993</div>
+                    <h2>El nacimiento</h2>
+                    <p>Una disciplina desconocida dominando la guerra final de deportes de contacto.</p>
+                    <p>Royce Gracie, un brasileño de 76 kilos, ganó el primer UFC sometiendo a tres luchadores de otras disciplinas, más grandes y fuertes.</p>
+                    <p>Ninguno conocía el Jiu-Jitsu Brasileño. Disciplina desarrollada en Brasil por su familia. Treinta años después, empezamos a ver cada vez menos sumisiones.</p>
+                </div>
+            </div>
+            <div class="scrolly-step" data-step="1">
+                <div class="scrolly-card">
+                    <div class="era-label">1993 – 2008</div>
+                    <h2>La era clásica</h2>
+                    <p>Las sumisiones eran el sello de identidad de la UFC. Un deporte de contacto recién nacido, desconocido para muchos, y una cantidad infinita de opciones con las que hacer que tu rival se rindiera sin propinar ni un solo golpe.</p>
+                    <p>En los primeros años, casi un tercio de las peleas terminaban con alguien rindiéndose o quedándose dormido.</p>
+                </div>
+            </div>
+            <div class="scrolly-spacer"></div>
+            <div class="scrolly-step" data-step="2">
+                <div class="scrolly-card">
+                    <div class="era-label">2009 – 2024</div>
+                    <h2>La era moderna</h2>
+                    <p>La UFC se profesionaliza, acuerdos con ESPN, nace la división femenina en 2012 y todos los luchadores empiezan a ser más completos, el Jiu Jitsu se convierte en prioridad para poder ser competitivo.</p>
+                    <p>El resultado: las sumisiones se desploman hasta el 15-18% actual.</p>
+                </div>
+            </div>
+            <div class="scrolly-spacer"></div>
+        </div>
+    </div>
+    <div class="explore-cta">
+        <p>Ahora explora los datos tú mismo</p>
+        <div class="arrow">↓</div>
+    </div>
+    <div class="viz viz-full" style="overflow: visible;">
+        <div class="viz-label">Evolución del % de sumisiones — Filtra por género, división y región</div>
+        <div style="width: 1000px; margin: 0 auto;">
+            <div class='tableauPlaceholder' id='viz1768253168166' style='position: relative'><noscript><a href='#'><img alt='Dashboard 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Te&#47;Temp_17681800584060&#47;Dashboard1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Temp_17681800584060&#47;Dashboard1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Te&#47;Temp_17681800584060&#47;Dashboard1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div><script type='text/javascript'>var divElement = document.getElementById('viz1768253168166');var vizElement = divElement.getElementsByTagName('object')[0];vizElement.style.width='1000px';vizElement.style.height='750px';var scriptElement = document.createElement('script');scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement, vizElement);</script>
+        </div>
+    </div>
+    <div class="content">
+        <div class="separator"></div>
+        <section class="section">
+            <h2>¿Cómo acaban ahora las peleas?</h2>
+        </section>
+    </div>
+    <div class="viz viz-full">
+        <div class="viz-label">Métodos de victoria por año</div>
+        <div style="width: 1000px; margin: 0 auto;">
+            <div class="flourish-embed flourish-chart" data-src="visualisation/27085729"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/27085729/thumbnail" width="100%" alt="chart visualization" /></noscript></div>
+        </div>
+    </div>
+    <div class="content">
+        <section class="section">
+            <p>En un deporte de contacto, una pelea que acaba en decisión es como un partido de fútbol sin gol: puede ser muy divertido, pero sientes que falta algo.</p>
+            <p>Mientras los nocauts se mantienen estables, las sumisiones y el TKO en el suelo han caído en picado, no solo vemos menos sumisiones, también presenciamos menos luchadores sometiendo a otros mediante una cantidad ingente de golpes en el suelo.</p>
+            <p>En la era clásica el 29.8% de las peleas iban a los jueces. Este número se ha doblado en la actualidad. La mitad de las peleas no son finalizadas, con lo que eso conlleva para el espectador. ¿Dónde ha quedado el show?</p>
+        </section>
+        <div class="separator"></div>
+        <section class="section">
+            <h2>¿Qué sumisiones sobreviven al declive?</h2>
+        </section>
+    </div>
+    <div class="viz viz-full">
+        <div class="viz-label">Tipos de sumisión por época</div>
+        <div style="width: 700px; margin: 0 auto; text-align: center;">
+            <img id="slope-simple" src="img/slope_simple.png" alt="Tipos de sumisión - Vista simple" style="max-width: 100%; display: block; margin: 0 auto;">
+            <img id="slope-completo" src="img/slope_completo.png" alt="Tipos de sumisión - Vista detallada" style="max-width: 100%; display: none; margin: 0 auto;">
+            <button id="toggle-slope" onclick="toggleSlope()" style="margin-top: 20px; padding: 10px 24px; background: #555; border: none; color: #fff; font-family: 'Oswald', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;">
+                Mostrar detalle
+            </button>
+        </div>
+    </div>
+    <script>
+    function toggleSlope() {
+        var simple = document.getElementById('slope-simple');
+        var completo = document.getElementById('slope-completo');
+        var btn = document.getElementById('toggle-slope');
+        if (simple.style.display !== 'none') {
+            simple.style.display = 'none';
+            completo.style.display = 'block';
+            btn.textContent = 'Mostrar menos detalle';
+        } else {
+            simple.style.display = 'block';
+            completo.style.display = 'none';
+            btn.textContent = 'Mostrar detalle';
+        }
+    }
+    </script>
+    <div class="content">
+        <section class="section">
+            <p>Sigue habiendo sumisiones, pero el criterio de los luchadores ha cambiado. Antes, encontrábamos sumisiones inexploradas a las que el rival no sabía hacer frente. El desarrollo técnico ha acabado con esta tendencia. Las técnicas que requieren un setup elaborado ya no funcionan ni sorprenden.</p>
+            <p>Las sumisiones más clásicas y efectivas son las elegidas para someter. El RNC o mataleón ha pasado de copar el 27% a representar el 40% del total de sumisiones en la era moderna. Es la técnica más básica del BJJ, y paradójicamente, la más difícil de defender.</p>
+            <p>Mientras tanto, el Armbar, técnica estrella de Royce Gracie, cae en picado debido a la gran amalgama de defensas desarrolladas, y otro clásico como el Triangle Choke casi desaparece. Pero el mensaje es claro: lo básico es lo que funciona ahora.</p>
+        </section>
+    </div>
+    <section class="cards-section">
+        <h2>Las 5 más usadas</h2>
+        <p style="text-align: center; max-width: 680px; margin: 0 auto 2rem;">Estas son las cinco técnicas que más victorias han dado en la historia de UFC. Pasa el cursor para conocer en detalle cada una.</p>
+        <div class="cards-grid">
+                <div class="card negra">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-name">Rear Naked Choke</div>
+                            <div class="card-number">587</div>
+                        </div>
+                        <div class="card-back">
+                            <img class="card-img" src="img/1.png" alt="RNC">
+                            <div class="card-desc">Mataleón clásico. Estrangulación desde la espalda rodeando el cuello con el brazo y bloqueando carótidas.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card marron">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-name">Guillotine Choke</div>
+                            <div class="card-number">269</div>
+                        </div>
+                        <div class="card-back">
+                            <img class="card-img" src="img/2.png" alt="Guillotine">
+                            <div class="card-desc">Estrangulación frontal rodeando el cuello con el brazo y tirando hacia arriba.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card morada">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-name">Armbar</div>
+                            <div class="card-number">187</div>
+                        </div>
+                        <div class="card-back">
+                            <img class="card-img" src="img/3.png" alt="Armbar">
+                            <div class="card-desc">Luxación de codo extendiendo el brazo con el codo bloqueado contra la cadera.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card azul">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-name">Arm Triangle</div>
+                            <div class="card-number">117</div>
+                        </div>
+                        <div class="card-back">
+                            <img class="card-img" src="img/4.png" alt="Arm Triangle">
+                            <div class="card-desc">Estrangulación presionando el cuello con el hombro mientras hay un brazo atrapado que bloquea la otra carótida.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card blanca">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="card-name">Triangle Choke</div>
+                            <div class="card-number">94</div>
+                        </div>
+                        <div class="card-back">
+                            <img class="card-img" src="img/5.png" alt="Triangle">
+                            <div class="card-desc">Estrangulación con las piernas alrededor del cuello y un brazo atrapado cortando la circulación.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="cards-hint" style="text-align: center;">Pasa el cursor para descubrir cada técnica</p>
+    </section>
+    <div class="content">
+        <div class="separator"></div>
+        <section class="section">
+            <h2>¿Y cuándo ocurren?</h2>
+        </section>
+    </div>
+    <div class="viz viz-full">
+        <div class="viz-label">Round de sumisión por época</div>
+        <div style="width: 1000px; margin: 0 auto;">
+            <div class="flourish-embed flourish-chart" data-src="visualisation/27124983"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/27124983/thumbnail" width="100%" alt="chart visualization" /></noscript></div>
+        </div>
+    </div>
+    <div class="content">
+        <section class="section">
+            <p>Entonces, si todos son tan buenos, ¿cómo sigue habiendo sumisiones? El mensaje está claro: más vale que lo intentes cuando el rival está bien cansado y magullado.</p>
+            <p>Antes, la dominancia hacía que el 69% de las sumisiones ocurrieran en el primer round. Hoy ese número ha bajado al 47%. La defensa ha mejorado tanto que hasta los mejores jiujitseros necesitan más tiempo para encontrar su momento de intentar finalizar.</p>
+        </section>
+        <div class="separator"></div>
+        <section class="section">
+            <h2>Esfuerzo vs resultado</h2>
+        </section>
+    </div>
+    <div class="viz viz-full" style="overflow: visible;">
+        <div class="viz-label">Esfuerzo de grappling vs Eficiencia</div>
+        <div style="width: 1000px; margin: 0 auto;">
+            <div class='tableauPlaceholder' id='viz1768253129553' style='position: relative'><noscript><a href='#'><img alt='Hoja 1 ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Es&#47;Esfuerzo&#47;Hoja1&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='Esfuerzo&#47;Hoja1' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Es&#47;Esfuerzo&#47;Hoja1&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div><script type='text/javascript'>var divElement = document.getElementById('viz1768253129553');var vizElement = divElement.getElementsByTagName('object')[0];vizElement.style.width='1000px';vizElement.style.height='500px';var scriptElement = document.createElement('script');scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';vizElement.parentNode.insertBefore(scriptElement, vizElement);</script>
+        </div>
+    </div>
+    <div class="content">
+        <section class="section">
+            <p>¿Y cómo sabemos que esto se debe a desarrollo técnico y no a que el grappling se ha abandonado? Si contamos el tiempo en suelo, derribos y control, vemos que los luchadores trabajan más en el suelo que nunca. Sin embargo, la eficiencia ha caído, se hace más esfuerzo y se consiguen menos sumisiones, con lo que se utiliza para controlar.</p>
+            <p>Además se necesitan menos intentos para conseguir sumisión, con lo que ante el conocimiento de las buenas defensas, solo se ataca cuando se está muy seguro de que se conseguirá someter, menos transiciones, menos movimiento, en definitiva, más control y menos show.</p>
+            <p>El trabajo en el suelo ha subido un 28% desde 2006, pero los intentos de sumisión exitosos han bajado un 5%.</p>
+            <p>La paradoja del desarrollo técnico: todos son mejores, y al final nadie somete a nadie. Y el espectador, en su casa, queriendo ver a alguien estrangulado, se queda sin el espectáculo por el que ha encendido el televisor.</p>
+        </section>
+    </div>
+    <section class="credits-section">
+        <div class="credits-content">
+            <h2>Créditos</h2>
+            <p style="font-size: 1.1rem; color: var(--text); margin-bottom: 2rem;">Escrito por Kevin Muñoz Borondo. Edición, diseño y desarrollo por Kevin Muñoz Borondo.</p>
+            <h2 style="margin-top: 3rem;">Métodos</h2>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;">Para analizar la evolución del Jiu Jitsu en UFC hemos creado métricas específicas que capturan diferentes dimensiones de rendimiento de suelo como:</p>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;"><strong style="color: var(--white);">Esfuerzo en el suelo:</strong> Índice compuesto que combina tiempo de control en el suelo, derribos completados y porcentaje de pelea en grappling. Para la gráfica se ha normalizado a base 100 respecto de 2006.</p>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;"><strong style="color: var(--white);">Intentos de sumisión:</strong> Número de intentos de finalización por sumisión ponderados por la duración de la pelea, normalizado a base 100 en 2006 para la visualización.</p>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;"><strong style="color: var(--white);">Clasificación de sumisiones:</strong> Las técnicas se agruparon en tres categorías según su complejidad técnica siguiendo criterios propios del dominio por un experto en Jiu Jitsu Brasileño.</p>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;">El corte temporal entre eras corresponde a la profesionalización del deporte y distintos criterios como creación de reglas unificadas.</p>
+            <p style="font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem;">Se analizaron 8,339 peleas desde UFC 2 hasta diciembre de 2024. El procesamiento de datos se realizó con Python y las visualizaciones con Flourish y Tableau Public.</p>
+        </div>
+    </section>
+    <footer>
+        <div style="width: 50px; height: 1px; background: #444; margin: 0 auto 2rem;"></div>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>Fuentes</h4>
+                <p><a href="https://www.kaggle.com/datasets" target="_blank">Kaggle UFC Datasets [1994-2025]</a><br>
+                <a href="https://github.com/jansen88/ufc-data" target="_blank">ufc-data (GitHub)</a></p>
+            </div>
+            <div class="footer-col">
+                <h4>Autor</h4>
+                <p>Kevin Muñoz Borondo<br>Máster en Ciencia de Datos<br>Universitat Oberta de Catalunya</p>
+            </div>
+        </div>
+    </footer>
+    <div style="background: #1a1a1a; text-align: center; padding: 1.5rem; font-size: 12px; color: #555;">
+        Visualización de datos UOC 2026
+    </div>
+    <script>
+    var steps = document.querySelectorAll('.scrolly-step');
+    var img1 = document.getElementById('img-era1');
+    var img2 = document.getElementById('img-era2');
+    
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var step = entry.target.dataset.step;
+                img1.classList.remove('active');
+                img2.classList.remove('active');
+                if (step === '1') { img1.classList.add('active'); }
+                else if (step === '2') { img2.classList.add('active'); }
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    for (var i = 0; i < steps.length; i++) { observer.observe(steps[i]); }
+    
+    function centerTableau() {
+        var tableauDiv = document.getElementById('viz1768183805100');
+        if (tableauDiv) {
+            tableauDiv.style.marginLeft = 'auto';
+            tableauDiv.style.marginRight = 'auto';
+            tableauDiv.style.display = 'block';
+        }
+    }
+    setTimeout(centerTableau, 1000);
+    setTimeout(centerTableau, 2000);
+    setTimeout(centerTableau, 3000);
+    window.addEventListener('load', centerTableau);
+    </script>
+</body>
+</html>
